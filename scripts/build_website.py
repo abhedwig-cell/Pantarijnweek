@@ -9,28 +9,31 @@ SLOTS = [
     ("TU_AM","dinsdag","ochtend","di-ochtend.html"),
     ("TU_PM","dinsdag","middag","di-middag.html"),
     ("WE_AM","woensdag","ochtend","wo-ochtend.html"),
-    ("WE_PM","woensdag","middag","di-middag.html".replace("di-","wo-")),
+    ("WE_PM","woensdag","middag","wo-middag.html"),
     ("TH_AM","donderdag","ochtend","do-ochtend.html"),
     ("TH_PM","donderdag","middag","do-middag.html"),
 ]
 NAV = [
-    ("Home","index.html"),("MHV","mhv.html"),("VMBO","vmbo.html"),("PrO","pro.html"),
-    *[(f"{d[:2].upper()} {p.upper()}",fn) for _,d,p,fn in SLOTS],
-    ("Vrijdag","vrijdag.html"),("Mijn Pantarijnweek","mijn-pantarijnweek.html"),
-    ("Impressie","impressie.html"),("Informatie & contact","informatie.html")
+    ("Home","index.html"),
+    ("Programma","programma.html"),
+    ("Doelgroepen","doelgroepen.html"),
+    ("Mijn week","mijn-pantarijnweek.html"),
+    ("Informatie","informatie.html"),
 ]
 
-def esc(v): return html.escape(str(v or ""), quote=True)
+def esc(v):
+    return html.escape(str(v or ""), quote=True)
 
-def demo_payload():
+def load_demo():
     data = json.loads((ROOT/"site/demo_2025.json").read_text(encoding="utf-8"))
     return data, data["offerings"]
 
-def canonical_payload():
+def load_canonical():
     activities = {}
     with (ROOT/"data/2026/activities.csv").open(encoding="utf-8-sig", newline="") as f:
         for row in csv.DictReader(f):
             activities[row["activity_id"]] = row
+
     offerings = []
     with (ROOT/"data/2026/offerings.csv").open(encoding="utf-8-sig", newline="") as f:
         for row in csv.DictReader(f):
@@ -45,7 +48,7 @@ def canonical_payload():
                 "offering_id": row["offering_id"],
                 "slot_id": row["slot_id"],
                 "title": act.get("title",""),
-                "short": (act.get("description") or "")[:180],
+                "short": (act.get("description") or "")[:150],
                 "description": act.get("description",""),
                 "audience": row.get("audience") or act.get("default_audience") or "",
                 "category": cats[0].lower() if cats else "overig",
@@ -53,89 +56,99 @@ def canonical_payload():
                 "icon": "✦",
                 "location": row.get("location_id") or row.get("room_id") or "Nog te bepalen",
             })
-    payload = {
+    return {
         "edition":"Pantarijnweek 2026",
         "date_line":"Week voor de kerstvakantie",
-        "notice":"Controleer vóór inschrijving altijd of het aanbod nog is gewijzigd.",
-        "news":"Actuele mededelingen worden vanuit de centrale hub gepubliceerd.",
-    }
-    return payload, offerings
-
-def nav():
-    return '<div class="menu-wrap"><nav class="menu wrap">' + ''.join(
-        f'<a href="{href}">{esc(label)}</a>' for label,href in NAV
-    ) + '</nav></div>'
+        "notice":"Definitieve informatie verschijnt zodra de organisatie deze heeft vrijgegeven.",
+    }, offerings
 
 def offerings_json(offerings):
     return json.dumps(offerings, ensure_ascii=False).replace("</","<\\/")
 
+def nav():
+    return '<nav class="nav">' + ''.join(
+        f'<a class="{"cta" if label == "Mijn week" else ""}" href="{href}">{esc(label)}</a>'
+        for label, href in NAV
+    ) + '</nav>'
+
 def dialog():
     return """<dialog class="dialog" id="detail-dialog">
 <div class="dialog-inner">
-<div class="dialog-head"><div><div class="kicker">Workshop</div><h2 data-dialog-title></h2></div>
-<button class="dialog-close" data-close-dialog aria-label="Sluiten">×</button></div>
-<p class="lead" data-dialog-description></p>
-<div class="detail-meta">
-<div><b>Doelgroep</b><span data-dialog-audience></span></div>
-<div><b>Locatie</b><span data-dialog-location></span></div>
-<div><b>Categorie</b><span data-dialog-category></span></div>
-<div><b>Bijzonderheden</b><span data-dialog-tags></span></div>
+  <div class="dialog-head">
+    <h2 data-dialog-title></h2>
+    <button class="dialog-close" data-close-dialog aria-label="Sluiten">×</button>
+  </div>
+  <p class="dialog-lead" data-dialog-description></p>
+  <div class="detail-list">
+    <div class="detail-row"><b>Doelgroep</b><span data-dialog-audience></span></div>
+    <div class="detail-row"><b>Locatie</b><span data-dialog-location></span></div>
+    <div class="detail-row"><b>Bijzonder</b><span data-dialog-special></span></div>
+  </div>
+  <div style="margin-top:20px">
+    <button class="button secondary" data-dialog-save data-save="">♡ Bewaar</button>
+  </div>
 </div>
-<div style="margin-top:18px"><button class="button secondary" data-dialog-save data-save="">♡ Bewaar</button></div>
-</div></dialog>"""
+</dialog>"""
 
 def shell(title, body, edition, offerings):
     return f"""<!doctype html>
-<html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#161a2a">
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ffffff">
 <title>{esc(title)} | Pantarijnweek</title>
-<link rel="stylesheet" href="assets/styles.css"></head>
+<link rel="stylesheet" href="assets/styles.css">
+</head>
 <body>
-<header class="topbar"><div class="wrap"><a class="brand" href="index.html">Pantarijnweek</a><span class="edition">{esc(edition)}</span></div></header>
-{nav()}
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="index.html">Pantarijn<span>week</span></a>
+    {nav()}
+  </div>
+</header>
 <main>{body}</main>
-<footer class="footer"><div class="wrap">Pantarijnweek · gegenereerd vanuit de centrale planning · publieke pagina bevat geen persoonlijke leerlinggegevens.</div></footer>
+<footer class="footer"><div class="wrap">Pantarijnweek · automatisch opgebouwd vanuit de centrale planning.</div></footer>
 {dialog()}
 <script type="application/json" id="offerings-data">{offerings_json(offerings)}</script>
 <script src="assets/app.js"></script>
-</body></html>"""
+</body>
+</html>"""
 
-def chip(t, cls=""):
-    if not t: return ""
-    return f'<span class="chip {cls}">{esc(t)}</span>'
+def day_cards():
+    groups = {}
+    for slot_id, day, part, filename in SLOTS:
+        groups.setdefault(day, []).append((part, filename))
+    return ''.join(
+        f"""<article class="day-card"><h3>{esc(day.title())}</h3>
+<div class="day-links">{''.join(f'<a href="{fn}">{esc(part.title())} →</a>' for part,fn in parts)}</div></article>"""
+        for day, parts in groups.items()
+    )
+
+def special_label(tags):
+    tags = [str(t).lower() for t in tags or []]
+    labels = []
+    if "verplicht" in tags: labels.append("Verplicht")
+    if "voorinschrijving" in tags: labels.append("Voorinschrijving")
+    if "buiten school" in tags: labels.append("Buiten school")
+    if "hele dag" in tags: labels.append("Hele dag")
+    return " · ".join(labels)
 
 def card(o):
-    tags = list(o.get("tags") or [])
-    warn = {"verplicht","voorinschrijving","buiten school","hele dag","betaald"}
-    chips = chip(o.get("audience",""),"audience") + "".join(
-        chip(t,"warn" if str(t).lower() in warn else "") for t in tags
-    )
-    return f"""<article class="card" data-card data-audience="{esc(o.get('audience',''))}" data-category="{esc(o.get('category','overig'))}" data-tags="{esc(' '.join(tags))}">
-<div class="card-visual"><span class="card-icon">{esc(o.get('icon','✦'))}</span><span class="category">{esc(o.get('category','overig'))}</span></div>
-<div class="card-body">
-<div class="chips">{chips}</div>
-<h3>{esc(o.get('title',''))}</h3>
-<p>{esc(o.get('short') or o.get('description',''))}</p>
-<div class="meta">⌖ {esc(o.get('location','Nog te bepalen'))}</div>
-<div class="card-actions">
-<button class="button primary" data-detail="{esc(o.get('offering_id',''))}">Meer info</button>
-<button class="button secondary" data-save="{esc(o.get('offering_id',''))}">♡ Bewaar</button>
-</div></div></article>"""
+    special = special_label(o.get("tags"))
+    return f"""<article class="workshop-card" data-card data-detail="{esc(o.get('offering_id'))}"
+data-audience="{esc(o.get('audience',''))}" data-category="{esc(o.get('category','overig'))}">
+  <div class="visual">{esc(o.get('icon','✦'))}</div>
+  <div class="workshop-copy">
+    <span class="audience">{esc(o.get('audience',''))}</span>
+    <h3>{esc(o.get('title',''))}</h3>
+    <p>{esc(o.get('short') or o.get('description',''))}</p>
+    {f'<div class="special">{esc(special)}</div>' if special else ''}
+  </div>
+</article>"""
 
 def write(out, name, content):
     (out/name).write_text(content, encoding="utf-8")
-
-def filters():
-    return """<div class="toolbar">
-<input class="search" data-search placeholder="Zoek op workshop, onderwerp of locatie…">
-<div class="filters">
-<button class="filter-btn active" data-filter="all">Alles</button>
-<button class="filter-btn" data-filter="OB">OB</button>
-<button class="filter-btn" data-filter="BB">BB</button>
-<button class="filter-btn" data-filter="sport">Sport</button>
-<button class="filter-btn" data-filter="creatief">Creatief</button>
-<button class="filter-btn" data-filter="techniek">Techniek</button>
-</div></div>"""
 
 def build(out, payload, offerings):
     out.mkdir(parents=True, exist_ok=True)
@@ -144,75 +157,96 @@ def build(out, payload, offerings):
     shutil.copyfile(ROOT/"site/assets/app.js", out/"assets/app.js")
     edition = payload.get("edition","Pantarijnweek")
 
-    slot_links = ''.join(
-        f'<a href="{fn}"><span class="day-dot"></span>{d.title()}<small>{p.title()}</small></a>'
-        for _,d,p,fn in SLOTS
-    )
-    home = f"""<section class="hero"><div class="wrap hero-grid"><div>
-<div class="kicker">Kies · ontdek · doe mee</div>
-<h1>Ontdek jouw Pantarijnweek</h1>
-<p>Bekijk workshops, activiteiten en excursies, maak je eigen voorlopige lijst en controleer vlak voor inschrijving of er iets is veranderd.</p>
-<div class="notice">{esc(payload.get('notice',''))}</div>
-</div><div class="hero-art"><div class="orb one">🎨</div><div class="orb two">🔬</div><div class="orb three">🏃</div><div class="hero-ribbon">{esc(payload.get('date_line',''))}</div></div></div></section>
-<section class="section"><div class="wrap">
-<div class="news"><span class="news-badge">NIEUWS</span><p>{esc(payload.get('news',''))}</p></div>
-<div class="section-head"><div><div class="kicker">Programma</div><h2>Kies een dagdeel</h2></div><p>Acht dagdelen, van maandag tot en met donderdag.</p></div>
-<div class="slot-links">{slot_links}</div>
+    home = f"""<section class="hero"><div class="wrap hero-grid">
+<div>
+  <div class="eyebrow">Week voor de kerstvakantie</div>
+  <h1>Ontdek wat jij wilt doen.</h1>
+  <p>Vier dagen vol workshops, activiteiten en excursies. Bekijk rustig het programma en bewaar een paar favorieten voor later.</p>
+  <div class="hero-actions">
+    <a class="button primary" href="programma.html">Bekijk het programma</a>
+    <a class="button secondary" href="doelgroepen.html">Hoe werkt deelname?</a>
+  </div>
+</div>
+<div class="hero-art">
+  <div class="shape a">🎨</div><div class="shape b">🏃</div><div class="shape c">🔬</div>
+  <div class="hero-label">{esc(payload.get('date_line','Pantarijnweek'))}</div>
+</div>
 </div></section>
-<section class="section"><div class="wrap"><div class="callout"><div><div class="kicker" style="color:#bdb0ff">Voorbereiden</div><h2 style="margin:0">Maak jouw voorlopige topkeuzes</h2><p>Bewaar interessante workshops tijdens het rondkijken. Dit is alleen een persoonlijke shortlist in jouw browser, geen inschrijving.</p></div><a class="button" href="mijn-pantarijnweek.html">Mijn Pantarijnweek (<span data-saved-count>0</span>)</a></div></div></section>"""
+<section class="section alt"><div class="wrap">
+  <div class="section-title"><div><div class="eyebrow">Programma</div><h2>Kies je dag</h2></div><p>Maandag tot en met donderdag, steeds een ochtend en een middag.</p></div>
+  <div class="day-grid">{day_cards()}</div>
+</div></section>
+<section class="section"><div class="wrap">
+  <div class="section-title"><div><div class="eyebrow">Voorbereiden</div><h2>Mijn week</h2></div><p>Bewaar interessante workshops. Dit is alleen jouw eigen lijst op dit apparaat, geen inschrijving.</p></div>
+  <a class="button primary" href="mijn-pantarijnweek.html">Bekijk mijn lijst (<span data-saved-count>0</span>)</a>
+</div></section>"""
     write(out,"index.html",shell("Home",home,edition,offerings))
 
+    programma = f"""<section class="section"><div class="wrap">
+<div class="section-title"><div><div class="eyebrow">Programma</div><h2>Alle dagdelen</h2></div><p>Kies eerst een dagdeel. Daarna zie je alleen de workshops die daar zijn ingepland.</p></div>
+<div class="day-grid">{day_cards()}</div>
+<p class="program-note">Vrijdag is een afsluitdag en valt buiten de gewone workshopkeuze.</p>
+</div></section>"""
+    write(out,"programma.html",shell("Programma",programma,edition,offerings))
+
     for slot_id, day, part, filename in SLOTS:
-        subset=[o for o in offerings if o.get("slot_id")==slot_id]
-        cards=''.join(card(o) for o in subset) if subset else '<div class="empty">Nog geen gepubliceerde activiteiten voor dit dagdeel.</div>'
-        body=f"""<section class="section"><div class="wrap" data-filter-root data-active-filter="all">
-<div class="kicker">{esc(day)}</div>
-<div class="section-head"><div><h2>{esc(day.title())} {esc(part)}</h2></div><p>Let op doelgroep en informatieblokken. Open een kaart voor meer details.</p></div>
-{filters()}<div class="grid">{cards}</div></div></section>"""
+        subset = [o for o in offerings if o.get("slot_id") == slot_id]
+        cards = ''.join(card(o) for o in subset) if subset else '<div class="empty">Voor dit dagdeel zijn nog geen workshops gepubliceerd.</div>'
+        body = f"""<section class="section"><div class="wrap" data-search-root data-audience-filter="all">
+<div class="section-title"><div><div class="eyebrow">{esc(day)}</div><h2>{esc(part.title())}</h2></div><p>Tik op een workshop voor alle details.</p></div>
+<div class="searchbar">
+  <input data-search placeholder="Zoek een workshop…">
+  <div class="segmented">
+    <button class="active" data-audience-filter="all">Alles</button>
+    <button data-audience-filter="OB">OB</button>
+    <button data-audience-filter="BB">BB</button>
+  </div>
+</div>
+<div class="workshop-grid">{cards}</div>
+</div></section>"""
         write(out,filename,shell(f"{day.title()} {part}",body,edition,offerings))
 
-    audience_pages = {
-      "mhv.html":("MHV","Bekijk het reguliere workshopaanbod en gebruik de dagdeelpagina's om je voorlopige keuzes te bewaren."),
-      "vmbo.html":("VMBO","De donderdag kan een aparte deelname- en inschrijfroute hebben. Alleen workshops die voor VMBO zijn opengesteld horen in de definitieve versie zichtbaar te zijn."),
-      "pro.html":("PrO","Voor PrO kan deelname via mentor of handmatige plaatsing verlopen. De definitieve werkwijze voor 2026 wordt pas gepubliceerd nadat deze is bevestigd.")
+    doelgroep = """<section class="section"><div class="wrap">
+<div class="section-title"><div><div class="eyebrow">Deelname</div><h2>Voor wie is wat bedoeld?</h2></div><p>De definitieve regels voor 2026 worden hier pas gepubliceerd zodra de organisatie ze heeft bevestigd.</p></div>
+<div class="audience-grid">
+<article class="audience-card"><h3>MHV</h3><p>Het reguliere workshopprogramma voor onderbouw en bovenbouw.</p><a href="mhv.html">Meer uitleg →</a></article>
+<article class="audience-card"><h3>VMBO</h3><p>Op donderdag kan een apart inschrijfvenster en een geselecteerd aanbod gelden.</p><a href="vmbo.html">Meer uitleg →</a></article>
+<article class="audience-card"><h3>PrO</h3><p>Deelname kan via een andere route verlopen dan gewone vrije inschrijving.</p><a href="pro.html">Meer uitleg →</a></article>
+</div></div></section>"""
+    write(out,"doelgroepen.html",shell("Doelgroepen",doelgroep,edition,offerings))
+
+    pages = {
+        "mhv.html":("MHV","Voor MHV-leerlingen bestaat het programma uit vrije workshops plus eventuele verplichte of vooraf vastgelegde activiteiten."),
+        "vmbo.html":("VMBO","Voor donderdag kan een geselecteerd deel van het aanbod voor VMBO worden opengesteld. De precieze inschrijfroute voor 2026 moet nog worden bevestigd."),
+        "pro.html":("PrO","Voor PrO kan deelname via lijsten of handmatige plaatsing verlopen. De precieze route voor 2026 moet nog worden bevestigd."),
     }
-    for filename,(label,text) in audience_pages.items():
-        body=f"""<section class="section"><div class="wrap"><div class="kicker">Doelgroep</div><h2>{esc(label)}</h2>
-<p style="max-width:760px;line-height:1.7;color:var(--muted)">{esc(text)}</p>
-<div class="notice">Prototype: definitieve deelname, begeleiding en inschrijfregels voor 2026 zijn nog niet gepubliceerd.</div>
-<div class="callout"><div><h3 style="margin:0">Bekijk het programma</h3><p>Ga naar een dagdeel, filter op doelgroep en bewaar je favorieten.</p></div><a class="button" href="do-ochtend.html">Naar donderdag</a></div>
+    for filename,(title,text) in pages.items():
+        body=f"""<section class="section"><div class="wrap"><div class="eyebrow">Doelgroep</div><h2 style="font-size:3rem;margin:0 0 18px">{esc(title)}</h2>
+<p style="max-width:720px;color:var(--muted);line-height:1.7">{esc(text)}</p>
+<div class="notice">Prototype: nog geen definitieve inschrijfinstructie voor 2026.</div>
+<a class="button primary" href="programma.html">Naar het programma</a></div></section>"""
+        write(out,filename,shell(title,body,edition,offerings))
+
+    myweek = """<section class="section"><div class="wrap">
+<div class="section-title"><div><div class="eyebrow">Persoonlijk</div><h2>Mijn week</h2></div><p>Een tijdelijke lijst met workshops die jij interessant vindt.</p></div>
+<div class="notice">Dit is geen inschrijving. De lijst blijft alleen in deze browser staan.</div>
+<div class="saved-list" data-saved-list></div>
 </div></section>"""
-        write(out,filename,shell(label,body,edition,offerings))
+    write(out,"mijn-pantarijnweek.html",shell("Mijn week",myweek,edition,offerings))
 
-    friday = """<section class="section"><div class="wrap"><div class="kicker">Vrijdag</div><h2>Afsluitdag</h2>
-<p style="max-width:760px;line-height:1.7;color:var(--muted)">Vrijdag valt buiten de gewone vrije workshopinschrijving. De definitieve invulling van de afsluitdag voor 2026 wordt later vanuit de centrale planning gepubliceerd.</p>
-<div class="notice">Er verschijnen hier pas onderdelen zodra ze door de organisatie als publiceerbaar zijn gemarkeerd.</div></div></section>"""
-    write(out,"vrijdag.html",shell("Vrijdag",friday,edition,offerings))
-
-    myweek = """<section class="section"><div class="wrap"><div class="kicker">Voorbereiden</div><div class="section-head"><div><h2>Mijn Pantarijnweek</h2><p>Jouw persoonlijke shortlist op dit apparaat.</p></div></div>
-<div class="notice">Dit is géén inschrijving. Je keuzes worden alleen lokaal in deze browser bewaard en niet naar school verzonden.</div>
-<div class="saved-list" data-saved-list></div></div></section>"""
-    write(out,"mijn-pantarijnweek.html",shell("Mijn Pantarijnweek",myweek,edition,offerings))
-
-    impressie = """<section class="section"><div class="wrap"><div class="kicker">Impressie</div><div class="section-head"><div><h2>Zo kan de week eruitzien</h2></div><p>Voorlopige grafische placeholders. Eigen Pantarijnfoto's kunnen later automatisch worden gekoppeld.</p></div>
-<div class="gallery"><div>🎭</div><div>🏐</div><div>🎨</div><div>🔬</div><div>🍳</div></div></div></section>"""
-    write(out,"impressie.html",shell("Impressie",impressie,edition,offerings))
-
-    info = """<section class="section"><div class="wrap"><div class="kicker">Informatie & contact</div><h2>Zo werkt deze nieuwe site</h2>
-<div class="info-grid">
-<div class="info-card"><b>1 bron</b><p>Workshopinformatie wordt centraal beheerd en niet opnieuw in een losse webeditor getypt.</p></div>
-<div class="info-card"><b>Automatisch</b><p>Na een goedgekeurde wijziging kan de publieke site opnieuw worden opgebouwd.</p></div>
-<div class="info-card"><b>Veilig</b><p>Interne planningsgegevens en leerlinginformatie horen niet op de publieke website.</p></div>
-</div>
-<div class="notice">Contactgegevens en definitieve instructies voor 2026 worden pas gepubliceerd wanneer de organisatie ze heeft bevestigd.</div></div></section>"""
-    write(out,"informatie.html",shell("Informatie & contact",info,edition,offerings))
+    info = """<section class="section"><div class="wrap">
+<div class="section-title"><div><div class="eyebrow">Informatie</div><h2>Over de Pantarijnweek</h2></div></div>
+<p style="max-width:760px;color:var(--muted);line-height:1.75">Deze nieuwe website wordt automatisch opgebouwd uit de centrale Pantarijnweekplanning. Daardoor hoeft workshopinformatie niet meer op meerdere plekken handmatig te worden bijgehouden.</p>
+<div class="notice">Definitieve contactgegevens, inschrijfdata en instructies voor 2026 worden later gepubliceerd.</div>
+</div></section>"""
+    write(out,"informatie.html",shell("Informatie",info,edition,offerings))
 
 def main():
     p=argparse.ArgumentParser()
     p.add_argument("--demo",action="store_true")
     p.add_argument("--output",default="site/public")
     args=p.parse_args()
-    payload, offerings = demo_payload() if args.demo else canonical_payload()
+    payload, offerings = load_demo() if args.demo else load_canonical()
     build(ROOT/args.output, payload, offerings)
     print(f"Built {len(offerings)} offerings into {args.output}")
 
