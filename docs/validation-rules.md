@@ -17,16 +17,35 @@ De validator is bedoeld om fouten vroeg te vinden. Niet alle regels zijn al defi
 
 ## Capaciteit
 
-Per slot moet de benodigde vrije-keuzecapaciteit worden berekend vanuit cohortgroottes en vaste activiteiten. De aantallen worden niet hardcoded in kolomkoppen.
+Per slot moet de benodigde vrije-keuzecapaciteit worden berekend vanuit cohortgroottes en reeds vastgelegde activiteiten. De aantallen worden niet hardcoded in kolomkoppen en niet als verborgen handmatige tussenuitkomst beheerd.
 
 Minimaal wordt apart gecontroleerd:
-- OB-vraag en OB-capaciteit
-- BB-vraag en BB-capaciteit
-- doelgroepbeperkingen
-- verplichte plaatsingen
-- voorinschrijving
+- OB-vraag en OB-capaciteit;
+- BB-vraag en BB-capaciteit;
+- doelgroepbeperkingen;
+- verplichte plaatsingen;
+- vrijwillige voorinschrijvingen die al vóór de hoofdinschrijving vaststaan;
+- examen-/eigen programma's voor zover die de vrije-keuzevraag reduceren;
+- reserve-/noodcapaciteit.
 
 De gewenste veiligheidsmarge voor overcapaciteit is nog door de organisatie te bepalen.
+
+## Capaciteits-preflight vóór inschrijving
+
+Een historische fout in de Excel-berekening heeft ertoe geleid dat bij openstelling van de inschrijving veel aanbod vrijwel direct vol zat. Daarom wordt een expliciete preflight-gate onderdeel van de nieuwe werkwijze.
+
+De hoofdinschrijving mag pas worden vrijgegeven wanneer:
+
+1. de bron van het totale aantal leerlingen per doelgroep bekend en vastgelegd is;
+2. alle verplichte plaatsingen per relevant slot zijn afgetrokken;
+3. alle reeds bekende vrijwillige voorinschrijvingen per relevant slot zijn afgetrokken;
+4. benodigde vrije-keuzecapaciteit en aangeboden capaciteit onafhankelijk opnieuw zijn berekend;
+5. OB en BB afzonderlijk de ingestelde veiligheidsmarge halen;
+6. afwijkingen ten opzichte van een tweede berekening of controletotaal verklaard zijn;
+7. de gebruikte aannames en bronwaarden zichtbaar zijn;
+8. de validaties zonder kritieke fouten slagen.
+
+Een rekenresultaat moet herleidbaar zijn naar bronwaarden. Een wijziging in leerlingaantal, vaste activiteit of offering moet de capaciteitsuitkomst reproduceerbaar veranderen.
 
 ## Lokalen
 
@@ -36,20 +55,37 @@ Een tekst als "PRO", "VMBO" of een adres mag niet automatisch als één exclusie
 
 ## Hele dag
 
-Een hele-dagactiviteit moet als zodanig gemodelleerd worden en beide betrokken slots blokkeren. De precieze representatie wordt vastgesteld na bespreking van de huidige Magister/Zermelo-werkwijze.
+Een hele-dagactiviteit moet als zodanig gemodelleerd worden en alle betrokken slots blokkeren. De precieze representatie wordt vastgesteld op basis van de feitelijke Magister-werkwijze.
+
+## Magister-routes
+
+Er zijn minstens twee operationeel verschillende Magister-routes:
+
+- **Keuzewerktijd** voor de reguliere vrije workshopinschrijving;
+- **Activiteiten** voor bepaalde speciale voorinschrijvingen, bijvoorbeeld een betaalde ski-dag.
+
+De centrale hub moet deze routes expliciet onderscheiden. Een speciale activiteit die vooraf een leerling bezet, moet de benodigde vrije-keuzecapaciteit van het betreffende slot reduceren.
+
+Voor betaalde activiteiten moeten deelname en betaalstatus niet als hetzelfde gegeven worden behandeld.
 
 ## Publicatie
 
-Website, Magister en Zermelo krijgen elk een eigen statusrecord. De kernplanning verandert niet doordat iets tijdelijk uit één kanaal wordt gehaald.
+De inhoudelijke publicatie-/inschrijfroutes die nu bevestigd zijn, zijn website en Magister.
+
+Zermelo maakt geen deel uit van de inhoudelijke Pantarijnweekdatastroom. Wel blijft als externe randvoorwaarde gelden dat het reguliere rooster voor de betreffende week correct moet zijn leeggezet.
 
 ## Nog te bevestigen met Susanne en organisatie
 
-- exacte betekenis van 0 en 1 in beide beschikbaarheidsbladen
-- bron van personeelsbeschikbaarheid
-- welke planningsregels hard zijn en welke voorkeur
-- manier waarop hele-dagactiviteiten in Magister en Zermelo worden ingevoerd
-- maximale en minimale groepsgrootte
-- prioriteit bij lokaalconflicten
-- regel voor begeleiding bij externe activiteiten
-- wijze waarop deelname van vmbo, PrO, ISK en andere locaties per dag wordt verwerkt
-- gewenste reservecapaciteit per doelgroep en slot
+- exacte betekenis van 0 en 1 in beide beschikbaarheidsbladen;
+- bron van personeelsbeschikbaarheid;
+- welke planningsregels hard zijn en welke voorkeur;
+- bron van leerlingaantallen per doelgroep en slot;
+- maximale en minimale groepsgrootte en formele uitzonderingsregel;
+- gewenste overcapaciteitsmarge;
+- gewenste reserve-/noodcapaciteit;
+- prioriteit bij lokaalconflicten;
+- regel voor begeleiding bij externe activiteiten;
+- wijze waarop deelname van vmbo, PrO, ISK en andere locaties per dag wordt verwerkt;
+- technische route Forms -> Excel/centrale hub;
+- exacte betaal-/deelnamestatus bij speciale activiteiten;
+- technische import-/exportmogelijkheden van Magister.
