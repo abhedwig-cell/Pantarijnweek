@@ -1,0 +1,13 @@
+# Private/raw source material
+imports/private/
+private/
+*.xlsx
+*.xls
+*.docx
+
+# Local exports and generated files
+outputs/
+dist/
+__pycache__/
+*.pyc
+.DS_Store
