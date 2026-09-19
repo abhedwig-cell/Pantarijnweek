@@ -24,17 +24,17 @@ jobs:
           python-version: "3.12"
       - name: Build demonstration website
         run: python scripts/build_website.py --demo
-      - name: Verify expected pages and v2 interactions
+      - name: Verify expected pages and v3 interactions
         run: |
           test -f site/public/index.html
+          test -f site/public/programma.html
+          test -f site/public/doelgroepen.html
           test -f site/public/ma-ochtend.html
-          test -f site/public/do-middag.html
-          test -f site/public/vmbo.html
           test -f site/public/mijn-pantarijnweek.html
-          test -f site/public/impressie.html
-          grep -q "Mijn Pantarijnweek" site/public/index.html
+          grep -q "Bekijk het programma" site/public/index.html
           grep -q "data-detail" site/public/ma-ochtend.html
-          grep -q "data-filter" site/public/do-ochtend.html
+          grep -q "data-audience-filter" site/public/ma-ochtend.html
+          grep -q "Mijn week" site/public/mijn-pantarijnweek.html
       - uses: actions/upload-artifact@v4
         with:
           name: generated-pantarijnweek-site
