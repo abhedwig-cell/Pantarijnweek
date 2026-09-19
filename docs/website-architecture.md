@@ -4,33 +4,41 @@
 
 De Pantarijnweek-website wordt geen tweede administratie. Hij wordt opnieuw gegenereerd uit de centrale hub.
 
-## Gereconstrueerde structuur
+## Kernprincipe
 
-De publieke 2025-site gebruikt:
-- doelgroep-pagina's voor MHV, VMBO en PrO;
-- afzonderlijke pagina's voor de acht dagdelen;
-- een vrijdagpagina;
-- Mijn Pantarijnweek;
-- Impressie;
-- Informatie & contact;
-- informatieblokken zoals verplicht, buiten school, voorinschrijving en hele dag.
+Een wijziging aan een activiteit wordt in de hub uitgevoerd. De website wordt daarna opnieuw gegenereerd. Er wordt niet ook nog handmatig een tweede kopie van dezelfde activiteit aangepast.
 
-Versie 2 behoudt die herkenbare informatiearchitectuur, maar bouwt de inhoud volledig uit gestructureerde hubdata.
+## Versie 3
 
-## Versie 2
+Versie 3 is een bewuste vereenvoudiging na evaluatie van versie 2.
 
-De tweede prototypeversie voegt toe:
-- mobile-first navigatie;
-- compactere workshopkaarten;
-- categorie- en doelgroepfilters;
-- zoeken;
-- detailvensters zonder de overzichtspagina vol tekst te zetten;
-- een lokale shortlist "Mijn Pantarijnweek";
-- visuele categorieën;
-- nieuws- en waarschuwingselementen;
-- aparte pagina's voor vrijdag en impressie.
+De hoofdnavigatie bevat nog maar:
+- Home;
+- Programma;
+- Doelgroepen;
+- Mijn week;
+- Informatie.
 
-De shortlist gebruikt alleen browser-localStorage. Er wordt geen leerlingidentiteit naar GitHub of de publieke site gestuurd en het is nadrukkelijk geen inschrijving.
+De acht dagdelen blijven bestaan, maar hangen onder Programma in plaats van allemaal tegelijk in de hoofdnavigatie te staan.
+
+Workshopkaarten tonen op het overzicht alleen:
+- beeld/pictogram;
+- doelgroep;
+- titel;
+- één korte zin;
+- alleen bij uitzondering een belangrijk label zoals verplicht of buiten school.
+
+Locatie, volledige omschrijving en overige bijzonderheden staan pas in het detailvenster.
+
+Zoeken blijft beschikbaar. Doelgroepfiltering is teruggebracht tot Alles / OB / BB. Categorieknoppen zijn uit de standaardinterface verwijderd om visuele drukte te voorkomen.
+
+## Mijn week
+
+Een leerling kan interessante workshops lokaal bewaren in de browser. Dit is:
+- geen inschrijving;
+- niet gekoppeld aan een leerlingaccount;
+- niet opgeslagen in GitHub;
+- alleen bedoeld als persoonlijke voorbereiding.
 
 ## Publicatiestroom
 
@@ -45,20 +53,16 @@ Activity + Offering + doelgroepregels + publicatiestatus
   dagdeelpagina's   doelgroep-pagina's   overige publieke pagina's
 ```
 
-## Belangrijkste regel
-
-Een wijziging aan een activiteit wordt in de hub uitgevoerd. De website wordt daarna opnieuw gegenereerd. Er wordt niet ook nog handmatig een tweede kopie van dezelfde activiteit aangepast.
-
 ## Publiceerbaarheid
 
-De productie-generator neemt alleen offerings op met een toegestane publicatiestatus. In een volgende datamodelstap wordt dit rechtstreeks gekoppeld aan PublicationState en OfferingAudience.
+De productie-generator neemt alleen offerings op met een toegestane publicatiestatus. Concepten, interne notities, personeelsinformatie en leerlinginformatie worden niet gepubliceerd.
 
-Concepten, interne notities, personeelsinformatie en leerlinginformatie worden niet gepubliceerd.
+In een volgende datamodelstap wordt publiceerbaarheid rechtstreeks gekoppeld aan PublicationState en OfferingAudience.
 
 ## Beeldmateriaal
 
-Versie 2 gebruikt eigen CSS-vormen en pictogrammen. Historische foto's en grafische bestanden worden pas opgenomen wanneer de organisatie de originele bestanden en gebruiksrechten beschikbaar heeft.
+De prototypes gebruiken eigen CSS-vormen en pictogrammen. Historische foto's en grafische bestanden worden pas opgenomen wanneer de organisatie de originele bestanden en gebruiksrechten beschikbaar heeft.
 
 ## Magister
 
-De website is volledig automatisch genereerbaar. Magister blijft voorlopig een semi-automatische uitvoerroute. Beide komen wel uit dezelfde centrale bron, waardoor titel, doelgroep en capaciteit niet opnieuw bedacht hoeven te worden.
+De website is volledig automatisch genereerbaar. Magister blijft voorlopig een semi-automatische uitvoerroute. Beide komen uit dezelfde centrale bron, waardoor titel, doelgroep en capaciteit niet opnieuw bedacht hoeven te worden.
