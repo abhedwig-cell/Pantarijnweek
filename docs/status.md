@@ -2,7 +2,7 @@
 
 ## 2026 central hub
 
-Status: FOUNDATION + ORGANISATION INTERVIEW CHECKPOINT
+Status: FOUNDATION + ORGANISATION INTERVIEW CHECKPOINT + MAGISTER BASELINE
 
 De centrale datastructuur, privacygrens, validatieregels en migratieroute zijn vastgelegd.
 
@@ -14,20 +14,30 @@ Daarmee zijn onder meer bevestigd:
 - één vrij dagdeel per leerling;
 - Forms als intake voor docentvoorstellen;
 - Excel als huidige leidende bron;
-- Magister Keuzewerktijd als inschrijfroute;
+- Magister Keuzewerktijd als hoofdinschrijfroute;
+- Magister Activiteiten als aparte route voor bepaalde speciale voorinschrijvingen;
 - handmatige website-invoer;
 - geen inhoudelijke rol voor Zermelo in de Pantarijnweekplanning;
 - aparte OB/BB-capaciteit en dubbele Magisterrecords bij gemengd aanbod;
 - verplichte activiteiten als harde blokkade voor vrije keuze;
 - reserve-/noodcapaciteit als operationele noodzaak;
-- handmatige synchronisatie en last-minute wijzigingen als grootste foutbron.
+- handmatige synchronisatie en last-minute wijzigingen als grootste foutbron;
+- locatie-overstijgende deelname vraagt expliciete doelgroepquota en inschrijfvensters.
+
+### Besluit Magister
+
+Voor de eerste operationele versie wordt uitgegaan van een **semi-automatische Magisterroute**.
+
+De centrale hub genereert en controleert de benodigde Magisterrecords. Een gebruiker voert ze vervolgens in Magister in en markeert ze als verwerkt/gecontroleerd. Volledige schrijfintegratie met Magister is geen afhankelijkheid voor de eerste versie.
+
+Zie `docs/decision-magister-semi-automatic.md`.
 
 Nog niet admitted als operationele 2026-planning:
 - echte 2026-activiteiten;
 - personeelsbeschikbaarheid;
 - lokalen en capaciteiten;
 - leerjaarverplichtingen;
-- Magister-import/exportcontract;
+- concrete Magister-werkinterface/export;
 - definitieve budgetregels;
 - exacte capaciteitsformules en bron van leerlingaantallen.
 
