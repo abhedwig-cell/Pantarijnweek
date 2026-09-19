@@ -1,0 +1,121 @@
+{
+  "edition": "2025 prototype",
+  "notice": "Technisch prototype met historische voorbeeldtitels. Dit is geen actuele inschrijfinformatie.",
+  "offerings": [
+    {
+      "offering_id": "DEMO-001",
+      "slot_id": "MO_AM",
+      "title": "Magische kaarttrucjes",
+      "description": "Historisch voorbeeld uit het workshopaanbod. De definitieve beschrijving wordt later uit de centrale hub gepubliceerd.",
+      "audience": "OB + BB",
+      "tags": [
+        "keuze"
+      ],
+      "icon": "🃏"
+    },
+    {
+      "offering_id": "DEMO-002",
+      "slot_id": "MO_AM",
+      "title": "De leesclub",
+      "description": "Historisch voorbeeld. In de productieversie staat deze tekst één keer in Activity en verschijnt hij automatisch op alle juiste pagina's.",
+      "audience": "OB + BB",
+      "tags": [
+        "keuze"
+      ],
+      "icon": "📚"
+    },
+    {
+      "offering_id": "DEMO-003",
+      "slot_id": "MO_AM",
+      "title": "Breakdance",
+      "description": "Voorbeeldkaart om de visuele presentatie en doelgroepfilters van de nieuwe website te testen.",
+      "audience": "OB + BB",
+      "tags": [
+        "sport"
+      ],
+      "icon": "🎵"
+    },
+    {
+      "offering_id": "DEMO-004",
+      "slot_id": "MO_AM",
+      "title": "Gamedesign",
+      "description": "Voorbeeld van een workshopkaart die rechtstreeks uit de hub kan worden gegenereerd.",
+      "audience": "OB + BB",
+      "tags": [
+        "techniek"
+      ],
+      "icon": "🎮"
+    },
+    {
+      "offering_id": "DEMO-005",
+      "slot_id": "WE_AM",
+      "title": "Proef de wereld",
+      "description": "Voorbeeld van een activiteit met een specifieke doelgroep en ruimtebehoefte.",
+      "audience": "OB",
+      "tags": [
+        "keuze",
+        "koken"
+      ],
+      "icon": "🍲"
+    },
+    {
+      "offering_id": "DEMO-006",
+      "slot_id": "WE_AM",
+      "title": "Eitje gooien",
+      "description": "Historische voorbeeldtitel, gebruikt om een gemengde OB/BB-workshop te demonstreren.",
+      "audience": "OB + BB",
+      "tags": [
+        "keuze"
+      ],
+      "icon": "🥚"
+    },
+    {
+      "offering_id": "DEMO-007",
+      "slot_id": "TH_AM",
+      "title": "EHBO",
+      "description": "Voorbeeld van een donderdagworkshop. In de echte hub kan hier ook doelgroepgeschiktheid voor MHV, VMBO en PrO aan worden gekoppeld.",
+      "audience": "OB",
+      "tags": [
+        "donderdag"
+      ],
+      "icon": "🩹"
+    },
+    {
+      "offering_id": "DEMO-008",
+      "slot_id": "TH_AM",
+      "title": "Urban Sketching",
+      "description": "Voorbeeldkaart met een creatieve activiteit. Beelden kunnen later als eigen assets vanuit de hub worden gekoppeld.",
+      "audience": "OB",
+      "tags": [
+        "creatief",
+        "donderdag"
+      ],
+      "icon": "✏️"
+    },
+    {
+      "offering_id": "DEMO-009",
+      "slot_id": "TH_AM",
+      "title": "Tennis voor beginners",
+      "description": "Voorbeeld van een externe of gespecialiseerde locatie. Locatie en ruimte komen straks als aparte velden uit de hub.",
+      "audience": "OB + BB",
+      "tags": [
+        "sport",
+        "buiten school",
+        "donderdag"
+      ],
+      "icon": "🎾"
+    },
+    {
+      "offering_id": "DEMO-010",
+      "slot_id": "TH_AM",
+      "title": "P-lab",
+      "description": "Voorbeeld van een activiteit die niet via de gewone vrije inschrijving loopt.",
+      "audience": "OB",
+      "tags": [
+        "verplicht",
+        "donderdag"
+      ],
+      "icon": "🎭"
+    }
+  ]
+}
