@@ -1,0 +1,9 @@
+slot_id,day,part,sequence,start_time,end_time
+MO_AM,maandag,ochtend,1,,
+MO_PM,maandag,middag,2,,
+TU_AM,dinsdag,ochtend,3,,
+TU_PM,dinsdag,middag,4,,
+WE_AM,woensdag,ochtend,5,,
+WE_PM,woensdag,middag,6,,
+TH_AM,donderdag,ochtend,7,,
+TH_PM,donderdag,middag,8,,
