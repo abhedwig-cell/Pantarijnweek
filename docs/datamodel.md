@@ -96,6 +96,64 @@ Choice mode krijgt een gecontroleerde waarde, bijvoorbeeld:
 
 Voor een mandatory offering is mandatory_target verplicht.
 
+### OfferingAudience
+
+Een expliciete koppeling tussen een offering en een doelgroep/cohort.
+
+Velden:
+- offering_id
+- cohort_id
+- eligibility = allowed / blocked / conditional
+- notes
+
+Hiermee wordt doelgroepgeschiktheid niet meer alleen in vrije tekst of in een globale OB/BB-aanduiding vastgelegd.
+
+### EnrollmentWindow
+
+Een inschrijfvenster bepaalt wanneer een doelgroep toegang krijgt tot een offering.
+
+Velden:
+- enrollment_window_id
+- offering_id
+- cohort_id
+- opens_at
+- closes_at
+- route = magister_choice / magister_activity / manual / other
+- status
+
+Dit ondersteunt bijvoorbeeld een eerdere inschrijfperiode voor een andere locatie zonder de onderliggende workshopcapaciteit handmatig te veranderen.
+
+### CapacityReservation
+
+Een gereserveerd deel van de capaciteit voor een doelgroep.
+
+Velden:
+- reservation_id
+- offering_id
+- cohort_id
+- reserved_places
+- valid_from
+- valid_until
+- release_policy = manual / release_at_close / keep_reserved
+- status
+
+De totale offeringcapaciteit blijft één bronwaarde. Een tijdelijke reservering verlaagt die bronwaarde niet.
+
+### PlacementSummary
+
+Voor planning en capaciteitscontrole kan op geaggregeerd niveau worden vastgelegd hoeveel leerlingen al zijn geplaatst.
+
+Velden:
+- placement_summary_id
+- offering_id
+- cohort_id
+- placement_type = mandatory / preregistered / manual / free_choice
+- placed_count
+- source
+- status
+
+Persoonsniveau hoort alleen in een daarvoor geschikte private omgeving. De openbare repository bevat geen leerlinggegevens.
+
 ### Location
 
 Een schoollocatie of externe locatie.
@@ -196,10 +254,11 @@ Velden:
 - status
 - note
 
-Channel:
+Bevestigde inhoudelijke kanalen:
 - website
 - magister
-- zermelo
+
+Zermelo is geen inhoudelijk publicatiekanaal voor de Pantarijnweek. De roosterleegte blijft een externe randvoorwaarde.
 
 Status:
 - not_ready
@@ -207,8 +266,6 @@ Status:
 - published
 - removed
 - blocked
-
-Hiermee verdwijnen vrije opmerkingen als x?, is eruit en verpl.n.di uit het kernrooster.
 
 ### BudgetItem
 
@@ -228,6 +285,14 @@ Dag- en weektotalen worden berekend en nooit handmatig nogmaals ingevoerd.
 ```
 Activity 1 --- n Offering n --- 1 TimeSlot
                      |
+                     +--- n OfferingAudience n --- 1 Cohort
+                     |
+                     +--- n EnrollmentWindow n --- 1 Cohort
+                     |
+                     +--- n CapacityReservation n --- 1 Cohort
+                     |
+                     +--- n PlacementSummary n --- 1 Cohort
+                     |
                      +--- 0..1 Room --- 1 Location
                      |
                      +--- n Assignment n --- 1 PersonRef
@@ -239,6 +304,21 @@ Activity 1 --- n Offering n --- 1 TimeSlot
 Cohort 1 --- n FixedActivity n --- 1 TimeSlot
 PersonRef 1 --- n StaffAvailability n --- 1 TimeSlot
 ```
+
+## Capaciteitsprincipe
+
+De capaciteit van een offering wordt niet tijdelijk overschreven om een doelgroep eerder te laten inschrijven.
+
+In plaats daarvan:
+
+```
+totale offeringcapaciteit
+- actieve reserveringen voor andere doelgroepen
+- reeds geplaatste deelnemers
+= op dat moment vrij beschikbare capaciteit
+```
+
+Na sluiting van een voorinschrijfvenster kan een ongebruikt quotum volgens de release_policy terugvallen naar de algemene capaciteit. Daardoor hoeft niemand meer het oorspronkelijke aantal handmatig te onthouden en terug te zetten.
 
 ## Stamgegevens versus planning
 
@@ -252,6 +332,10 @@ Stamgegevens:
 Jaar- en roostergebonden gegevens:
 - TimeSlot
 - Offering
+- OfferingAudience
+- EnrollmentWindow
+- CapacityReservation
+- PlacementSummary
 - FixedActivity
 - StaffAvailability
 - Assignment
