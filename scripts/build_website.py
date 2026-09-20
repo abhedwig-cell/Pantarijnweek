@@ -62,6 +62,22 @@ def load_canonical():
         "notice":"Definitieve informatie verschijnt zodra de organisatie deze heeft vrijgegeven.",
     }, offerings
 
+def load_slot_times():
+    times = {}
+    with (ROOT/"data/2026/time_slots.csv").open(encoding="utf-8-sig", newline="") as f:
+        for row in csv.DictReader(f):
+            times[row["slot_id"]] = {
+                "start_time": row.get("start_time", "").strip(),
+                "end_time": row.get("end_time", "").strip(),
+            }
+    return times
+
+def slot_time_label(slot_id, times):
+    value = times.get(slot_id, {})
+    start = value.get("start_time", "")
+    end = value.get("end_time", "")
+    return f"{start}–{end}" if start and end else ""
+
 def offerings_json(offerings):
     return json.dumps(offerings, ensure_ascii=False).replace("</","<\\/")
 
@@ -156,6 +172,7 @@ def build(out, payload, offerings):
     shutil.copyfile(ROOT/"site/assets/styles.css", out/"assets/styles.css")
     shutil.copyfile(ROOT/"site/assets/app.js", out/"assets/app.js")
     edition = payload.get("edition","Pantarijnweek")
+    times = load_slot_times()
 
     home = f"""<section class="hero"><div class="wrap hero-grid">
 <div>
@@ -174,7 +191,7 @@ def build(out, payload, offerings):
 </div></section>
 <section class="section alt"><div class="wrap">
   <div class="section-title"><div><div class="eyebrow">Programma</div><h2>Kies je dag</h2></div><p>Maandag tot en met donderdag, steeds een ochtend en een middag.</p></div>
-  <div class="day-grid">{day_cards()}</div>
+  <div class="day-grid">{day_cards(times)}</div>
 </div></section>
 <section class="section"><div class="wrap">
   <div class="section-title"><div><div class="eyebrow">Voorbereiden</div><h2>Mijn week</h2></div><p>Bewaar interessante workshops. Dit is alleen jouw eigen lijst op dit apparaat, geen inschrijving.</p></div>
@@ -184,7 +201,7 @@ def build(out, payload, offerings):
 
     programma = f"""<section class="section"><div class="wrap">
 <div class="section-title"><div><div class="eyebrow">Programma</div><h2>Alle dagdelen</h2></div><p>Kies eerst een dagdeel. Daarna zie je alleen de workshops die daar zijn ingepland.</p></div>
-<div class="day-grid">{day_cards()}</div>
+<div class="day-grid">{day_cards(times)}</div>
 <p class="program-note">Vrijdag is een afsluitdag en valt buiten de gewone workshopkeuze.</p>
 </div></section>"""
     write(out,"programma.html",shell("Programma",programma,edition,offerings))
@@ -193,7 +210,7 @@ def build(out, payload, offerings):
         subset = [o for o in offerings if o.get("slot_id") == slot_id]
         cards = ''.join(card(o) for o in subset) if subset else '<div class="empty">Voor dit dagdeel zijn nog geen workshops gepubliceerd.</div>'
         body = f"""<section class="section"><div class="wrap" data-search-root data-audience-filter="all">
-<div class="section-title"><div><div class="eyebrow">{esc(day)}</div><h2>{esc(part.title())}</h2></div><p>Tik op een workshop voor alle details.</p></div>
+<div class="section-title"><div><div class="eyebrow">{esc(day)}</div><h2>{esc(part.title())}{(' · ' + esc(slot_time_label(slot_id, times))) if slot_time_label(slot_id, times) else ''}</h2></div><p>Tik op een workshop voor alle details.</p></div>
 <div class="searchbar">
   <input data-search placeholder="Zoek een workshop…">
   <div class="segmented">
