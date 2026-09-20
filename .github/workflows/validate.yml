@@ -15,3 +15,16 @@ jobs:
           python-version: "3.12"
       - name: Validate normalized data
         run: python scripts/validate_data.py
+      - name: Build dashboard signals
+        run: python scripts/build_dashboard_signals.py --output /tmp/dashboard_signals.json
+      - name: Verify dashboard signal contract
+        run: |
+          python - <<'PY'
+          import json
+          p = json.load(open("/tmp/dashboard_signals.json", encoding="utf-8"))
+          assert p["edition"] == "2026"
+          assert isinstance(p["signals"], list)
+          assert all(s["severity"] in {"info","ok","warning","critical","unknown"} for s in p["signals"])
+          assert all(s["rule_id"] and s["scope_type"] for s in p["signals"])
+          print(f"dashboard signals OK: {len(p['signals'])}")
+          PY
