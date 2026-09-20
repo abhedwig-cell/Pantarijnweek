@@ -22,7 +22,8 @@ Daarmee zijn onder meer bevestigd:
 - verplichte activiteiten als harde blokkade voor vrije keuze;
 - reserve-/noodcapaciteit als operationele noodzaak;
 - handmatige synchronisatie en last-minute wijzigingen als grootste foutbron;
-- locatie-overstijgende deelname vraagt expliciete doelgroepquota en inschrijfvensters.
+- locatie-overstijgende deelname vraagt expliciete doelgroepquota en inschrijfvensters;
+- buitenom aangemaakte Magister-activiteiten vormen een expliciet reconciliatierisico en krijgen een eigen inbox/controlepad.
 
 ### Besluit Magister
 
@@ -30,7 +31,7 @@ Voor de eerste operationele versie wordt uitgegaan van een **semi-automatische M
 
 De centrale hub genereert en controleert de benodigde Magisterrecords. Een gebruiker voert ze vervolgens in Magister in en markeert ze als verwerkt/gecontroleerd. Volledige schrijfintegratie met Magister is geen afhankelijkheid voor de eerste versie.
 
-Zie `docs/decision-magister-semi-automatic.md`.
+Zie `docs/decision-magister-semi-automatic.md` en `docs/outside-in-reconciliation.md`.
 
 Nog niet admitted als operationele 2026-planning:
 - echte 2026-activiteiten;

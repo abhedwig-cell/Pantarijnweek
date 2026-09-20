@@ -28,6 +28,8 @@ De centrale hub genereert per benodigd Magisterrecord minimaal:
 
 De gebruiker voert alleen de noodzakelijke gegevens in Magister in en markeert daarna het record in de hub als verwerkt.
 
+Er is daarnaast een ondersteunde **outside-in route** voor het geval een record toch eerst rechtstreeks in Magister wordt aangemaakt. Zo'n record wordt via een buitenom-inbox teruggebracht in de centrale regie en gekoppeld aan een bestaande Offering/FixedActivity of aan een minimale centrale stub.
+
 ## Vereiste ondersteuning
 
 De semi-automatische route moet zo weinig mogelijk denkwerk aan de Magisterkant overlaten.
@@ -41,7 +43,11 @@ Gewenste functies:
 5. waarschuwing wanneer een bronrecord verandert nadat het al in Magister is ingevoerd;
 6. preflight telling: verwacht aantal Magisterrecords versus ingevoerd/gecontroleerd;
 7. aparte behandeling van Keuzewerktijd en Activiteiten;
-8. audit trail van wijzigingen.
+8. audit trail van wijzigingen;
+9. buitenom-inbox voor records die eerst in Magister zijn aangemaakt;
+10. snelle capture met minimaal titel + dagdeel + Magisterroute;
+11. optionele veilige import van export, screenshot of foto als invoerhulp;
+12. reconciliatiestatus totdat centraal en Magister weer overeenkomen.
 
 ## Niet doen
 
@@ -50,7 +56,8 @@ De eerste versie is niet afhankelijk van:
 - een niet-bevestigde Magister API;
 - browserautomatisering die de Magisterinterface nabootst;
 - handmatig opnieuw berekenen van capaciteit in Magister;
-- losse Excelnotities om bij te houden wat al is ingevoerd.
+- losse Excelnotities om bij te houden wat al is ingevoerd;
+- foto's of screenshots met leerlinggegevens opslaan in de openbare GitHub-repository.
 
 ## Latere uitbreiding
 

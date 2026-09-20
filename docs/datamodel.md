@@ -154,6 +154,31 @@ Velden:
 
 Persoonsniveau hoort alleen in een daarvoor geschikte private omgeving. De openbare repository bevat geen leerlinggegevens.
 
+### ExternalSystemRecord
+
+Een extern record dat buiten de hub in bijvoorbeeld Magister is aangemaakt of gewijzigd en nog gereconcilieerd moet worden.
+
+Velden:
+- external_record_id
+- system = magister / other
+- route = magister_choice / magister_activity / manual / other
+- offering_id = optioneel totdat matching is afgerond
+- fixed_activity_id = optioneel totdat matching is afgerond
+- external_key = optioneel technisch recordnummer
+- title_snapshot
+- slot_snapshot
+- capacity_snapshot
+- participant_count_snapshot
+- source = manual_quick_capture / export / screenshot / photo
+- secure_evidence_ref = optionele niet-herleidbare verwijzing naar beveiligde bron
+- status = captured / unreconciled / matched / created / verified / superseded
+- captured_at
+- verified_at
+
+Dit record ondersteunt de situatie waarin iemand eerst in Magister handelt. De hub hoeft dan niet te doen alsof die handeling niet bestaat: het externe record komt in een reconciliatie-inbox en wordt daarna gekoppeld aan een Offering of FixedActivity.
+
+Een screenshot, foto of deelnemerslijst zelf hoort niet in de openbare repository. Alleen geaggregeerde aantallen en eventueel een niet-herleidbare secure_evidence_ref mogen hier worden vastgelegd.
+
 ### Location
 
 Een schoollocatie of externe locatie.
@@ -293,6 +318,8 @@ Activity 1 --- n Offering n --- 1 TimeSlot
                      |
                      +--- n PlacementSummary n --- 1 Cohort
                      |
+                     +--- n ExternalSystemRecord
+                     |
                      +--- 0..1 Room --- 1 Location
                      |
                      +--- n Assignment n --- 1 PersonRef
@@ -336,6 +363,7 @@ Jaar- en roostergebonden gegevens:
 - EnrollmentWindow
 - CapacityReservation
 - PlacementSummary
+- ExternalSystemRecord
 - FixedActivity
 - StaffAvailability
 - Assignment
