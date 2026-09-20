@@ -1,0 +1,7 @@
+{
+  "capacity_safety_margin_ob": null,
+  "capacity_safety_margin_bb": null,
+  "reserve_capacity_target_ob": null,
+  "reserve_capacity_target_bb": null,
+  "notes": "Null betekent dat de organisatie de grens nog niet heeft vastgesteld. Dashboard moet dit als unknown tonen, niet als groen."
+}
