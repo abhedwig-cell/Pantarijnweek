@@ -131,15 +131,22 @@ def shell(title, body, edition, offerings):
 </body>
 </html>"""
 
-def day_cards():
+def day_cards(times):
     groups = {}
     for slot_id, day, part, filename in SLOTS:
-        groups.setdefault(day, []).append((part, filename))
-    return ''.join(
-        f"""<article class="day-card"><h3>{esc(day.title())}</h3>
-<div class="day-links">{''.join(f'<a href="{fn}">{esc(part.title())} →</a>' for part,fn in parts)}</div></article>"""
-        for day, parts in groups.items()
-    )
+        groups.setdefault(day, []).append((slot_id, part, filename))
+    cards = []
+    for day, parts in groups.items():
+        links = []
+        for slot_id, part, filename in parts:
+            time_label = slot_time_label(slot_id, times)
+            label = part.title() + (f" · {time_label}" if time_label else "")
+            links.append(f'<a href="{filename}">{esc(label)} →</a>')
+        cards.append(
+            f'<article class="day-card"><h3>{esc(day.title())}</h3>'
+            f'<div class="day-links">{"".join(links)}</div></article>'
+        )
+    return "".join(cards)
 
 def special_label(tags):
     tags = [str(t).lower() for t in tags or []]
