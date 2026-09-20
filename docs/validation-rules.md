@@ -118,6 +118,20 @@ De centrale hub moet deze routes expliciet onderscheiden. Een speciale activitei
 
 Voor betaalde activiteiten moeten deelname en betaalstatus niet als hetzelfde gegeven worden behandeld.
 
+## Dashboard- en signaleringsregels
+
+Dashboardstatussen zijn afgeleid en mogen niet als handmatige kleurcode worden beheerd.
+
+Voor elk rood/oranje/groen of gelijkwaardig signaal geldt:
+- de gebruikte bronrecords zijn herleidbaar;
+- de regel die het signaal bepaalt is expliciet;
+- `unknown` wordt onderscheiden van `ok`;
+- een wijziging in relevante brondata triggert herberekening;
+- het signaal vermeldt minimaal scope, regel, ernst en berekenmoment;
+- een kritieke dashboardmelding die een preflight-gate raakt moet dezelfde onderliggende validatieregel gebruiken als de formele preflight.
+
+Een dashboard mag een fout niet verbergen door alleen een geaggregeerd totaal te tonen. De gebruiker moet kunnen terugvinden welke offering, doelgroep, ruimte, Magisterroute of bronwaarde het signaal veroorzaakt.
+
 ## Publicatie
 
 De inhoudelijke publicatie-/inschrijfroutes die nu bevestigd zijn, zijn website en Magister.
