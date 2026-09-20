@@ -1,9 +1,9 @@
 slot_id,day,part,sequence,start_time,end_time
-MO_AM,maandag,ochtend,1,,
-MO_PM,maandag,middag,2,,
-TU_AM,dinsdag,ochtend,3,,
-TU_PM,dinsdag,middag,4,,
-WE_AM,woensdag,ochtend,5,,
-WE_PM,woensdag,middag,6,,
-TH_AM,donderdag,ochtend,7,,
-TH_PM,donderdag,middag,8,,
+MO_AM,maandag,ochtend,1,10:00,12:30
+MO_PM,maandag,middag,2,13:15,15:45
+TU_AM,dinsdag,ochtend,3,10:00,12:30
+TU_PM,dinsdag,middag,4,13:15,15:45
+WE_AM,woensdag,ochtend,5,10:00,12:30
+WE_PM,woensdag,middag,6,13:15,15:45
+TH_AM,donderdag,ochtend,7,10:00,12:30
+TH_PM,donderdag,middag,8,13:15,15:45

@@ -17,6 +17,7 @@ Volledige programmatische schrijf-integratie met Magister is **geen afhankelijkh
 De centrale hub genereert per benodigd Magisterrecord minimaal:
 
 - dagdeel;
+- exacte start- en eindtijd uit TimeSlot;
 - titel;
 - Magisterroute: Keuzewerktijd of Activiteit;
 - doelgroep;
@@ -47,7 +48,9 @@ Gewenste functies:
 9. buitenom-inbox voor records die eerst in Magister zijn aangemaakt;
 10. snelle capture met minimaal titel + dagdeel + Magisterroute;
 11. optionele veilige import van export, screenshot of foto als invoerhulp;
-12. reconciliatiestatus totdat centraal en Magister weer overeenkomen.
+12. reconciliatiestatus totdat centraal en Magister weer overeenkomen;
+13. invoer van de echte workshopduur: ochtend 10:00–12:30 en middag 13:15–15:45;
+14. geen terugval op de historische lesuur-2/lesuur-5-workaround.
 
 ## Niet doen
 
@@ -62,3 +65,13 @@ De eerste versie is niet afhankelijk van:
 ## Latere uitbreiding
 
 Als later een officieel ondersteunde import- of schrijfkoppeling beschikbaar blijkt, kan een automatische adapter de handmatige invoerstap vervangen zonder het centrale datamodel te wijzigen.
+
+## Magister MX en absentie
+
+Sinds de overstap van de school naar Magister MX voor absentie kan de Pantarijnweek met de daadwerkelijke workshopblokken in de leerlingagenda worden gezet.
+
+Voor 2026 geldt:
+- ochtend: 10:00–12:30;
+- middag: 13:15–15:45.
+
+De vroegere koppeling aan alleen lesuur 2 en lesuur 5 was een technische workaround voor absentie en is geen 2026-planningsregel meer. De centrale TimeSlot is authority voor deze tijden.

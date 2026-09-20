@@ -10,7 +10,8 @@ Op 19 september 2026 is een eerste mondeling organisatie-interview vastgelegd in
 
 Daarmee zijn onder meer bevestigd:
 - acht workshopdagdelen van maandag t/m donderdag;
-- workshops van circa 2,5 uur;
+- exacte workshopblokken: ochtend 10:00–12:30 en middag 13:15–15:45;
+- Magister MX maakt registratie op echte bloktijden mogelijk, waardoor de oude lesuur-2/lesuur-5-workaround vervalt;
 - één vrij dagdeel per leerling;
 - Forms als intake voor docentvoorstellen;
 - Excel als huidige leidende bron;
@@ -32,7 +33,7 @@ Voor de eerste operationele versie wordt uitgegaan van een **semi-automatische M
 
 De centrale hub genereert en controleert de benodigde Magisterrecords. Een gebruiker voert ze vervolgens in Magister in en markeert ze als verwerkt/gecontroleerd. Volledige schrijfintegratie met Magister is geen afhankelijkheid voor de eerste versie.
 
-Zie `docs/decision-magister-semi-automatic.md`, `docs/outside-in-reconciliation.md` en `docs/dashboard-architecture.md`.
+Zie `docs/decision-magister-semi-automatic.md`, `docs/outside-in-reconciliation.md`, `docs/dashboard-architecture.md` en `docs/interview-addendum-magister-mx-times-2026-09-20.md`.
 
 Nog niet admitted als operationele 2026-planning:
 - echte 2026-activiteiten;
