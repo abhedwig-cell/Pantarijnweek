@@ -28,3 +28,14 @@ jobs:
           assert all(s["rule_id"] and s["scope_type"] for s in p["signals"])
           print(f"dashboard signals OK: {len(p['signals'])}")
           PY
+      - name: Build deterministic dashboard demo
+        run: |
+          python scripts/build_dashboard_demo_signals.py --output /tmp/dashboard_demo_signals.json
+          python scripts/build_dashboard.py --input /tmp/dashboard_demo_signals.json --output dashboard/public
+      - name: Verify dashboard rendering and capacity transition
+        run: |
+          test -f dashboard/public/index.html
+          grep -q "Maandag ochtend · OB" dashboard/public/index.html
+          grep -q "marge -9" dashboard/public/index.html
+          grep -q "Kritiek" dashboard/public/index.html
+          grep -q "Gewijzigd na Magisterinvoer" dashboard/public/index.html
