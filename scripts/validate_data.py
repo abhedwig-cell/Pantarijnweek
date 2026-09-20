@@ -24,6 +24,7 @@ FILES = {
     "fixed_activities": ("fixed_activities.csv", ["fixed_activity_id", "title", "slot_id", "cohort_id", "participation_mode", "student_count", "location_id", "room_id", "status", "notes"]),
     "publication_status": ("publication_status.csv", ["offering_id", "channel", "status", "note"]),
     "budget": ("budget.csv", ["budget_item_id", "offering_id", "amount_eur", "status", "note"]),
+    "external_system_records": ("external_system_records.csv", ["external_record_id", "system", "route", "offering_id", "fixed_activity_id", "external_key", "title_snapshot", "slot_snapshot", "capacity_snapshot", "participant_count_snapshot", "source", "secure_evidence_ref", "status", "captured_at", "verified_at"]),
 }
 
 PRIMARY_KEYS = {
@@ -37,6 +38,7 @@ PRIMARY_KEYS = {
     "assignments": "assignment_id",
     "fixed_activities": "fixed_activity_id",
     "budget": "budget_item_id",
+    "external_system_records": "external_record_id",
 }
 
 VALID = {
@@ -45,6 +47,10 @@ VALID = {
     "participation_mode": {"mandatory", "preregistration", "optional", "unknown", ""},
     "channel": {"website", "magister", "zermelo", ""},
     "publication_status": {"not_ready", "ready", "published", "removed", "blocked", ""},
+    "external_system": {"magister", "other", ""},
+    "external_route": {"magister_choice", "magister_activity", "manual", "other", ""},
+    "external_source": {"manual_quick_capture", "export", "screenshot", "photo", ""},
+    "reconciliation_status": {"captured", "unreconciled", "matched", "created", "verified", "superseded", ""},
 }
 
 def read_csv(name: str):
@@ -102,6 +108,7 @@ def main() -> int:
     location_ids = ids["locations"]
     room_ids = ids["rooms"]
     person_ids = ids["people"]
+    fixed_activity_ids = ids["fixed_activities"]
 
     for line, row in enumerate(data["rooms"], 2):
         loc = row["location_id"].strip()
@@ -174,6 +181,29 @@ def main() -> int:
         if row["offering_id"].strip() and row["offering_id"].strip() not in offering_ids:
             errors.append(f"budget:{line}: unknown offering_id={row['offering_id']}")
         number(row["amount_eur"], f"budget:{line}:amount_eur", errors, allow_blank=False)
+
+    for line, row in enumerate(data["external_system_records"], 2):
+        offering = row["offering_id"].strip()
+        fixed = row["fixed_activity_id"].strip()
+        status = row["status"].strip()
+        if offering and offering not in offering_ids:
+            errors.append(f"external_system_records:{line}: unknown offering_id={offering}")
+        if fixed and fixed not in fixed_activity_ids:
+            errors.append(f"external_system_records:{line}: unknown fixed_activity_id={fixed}")
+        if offering and fixed:
+            errors.append(f"external_system_records:{line}: both offering_id and fixed_activity_id set")
+        if status in {"matched", "created", "verified"} and not (offering or fixed):
+            errors.append(f"external_system_records:{line}: status={status} requires central match")
+        if row["system"].strip() not in VALID["external_system"]:
+            errors.append(f"external_system_records:{line}: invalid system={row['system']}")
+        if row["route"].strip() not in VALID["external_route"]:
+            errors.append(f"external_system_records:{line}: invalid route={row['route']}")
+        if row["source"].strip() not in VALID["external_source"]:
+            errors.append(f"external_system_records:{line}: invalid source={row['source']}")
+        if status not in VALID["reconciliation_status"]:
+            errors.append(f"external_system_records:{line}: invalid status={status}")
+        number(row["capacity_snapshot"], f"external_system_records:{line}:capacity_snapshot", errors)
+        number(row["participant_count_snapshot"], f"external_system_records:{line}:participant_count_snapshot", errors)
 
     if errors:
         print("Validation failed:")
