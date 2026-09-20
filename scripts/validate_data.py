@@ -6,6 +6,7 @@ from __future__ import annotations
 import csv
 import sys
 from collections import defaultdict
+from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -87,6 +88,18 @@ def number(value, label, errors, allow_blank=True):
     except ValueError:
         errors.append(f"{label}: not numeric: {value}")
 
+
+def parse_time(value, label, errors):
+    value = value.strip()
+    if not value:
+        errors.append(f"{label}: empty time")
+        return None
+    try:
+        return datetime.strptime(value, "%H:%M")
+    except ValueError:
+        errors.append(f"{label}: invalid HH:MM time: {value}")
+        return None
+
 def main() -> int:
     errors = []
     data = {}
@@ -109,6 +122,28 @@ def main() -> int:
     room_ids = ids["rooms"]
     person_ids = ids["people"]
     fixed_activity_ids = ids["fixed_activities"]
+
+
+    expected_times = {
+        "ochtend": ("10:00", "12:30"),
+        "middag": ("13:15", "15:45"),
+    }
+    for line, row in enumerate(data["time_slots"], 2):
+        part = row["part"].strip().lower()
+        start = row["start_time"].strip()
+        end = row["end_time"].strip()
+        start_dt = parse_time(start, f"time_slots:{line}:start_time", errors)
+        end_dt = parse_time(end, f"time_slots:{line}:end_time", errors)
+        if start_dt and end_dt:
+            minutes = int((end_dt - start_dt).total_seconds() // 60)
+            if minutes != 150:
+                errors.append(f"time_slots:{line}: expected 150-minute workshop block, got {minutes}")
+        if part in expected_times:
+            expected_start, expected_end = expected_times[part]
+            if start != expected_start or end != expected_end:
+                errors.append(
+                    f"time_slots:{line}: {part} must be {expected_start}-{expected_end}, got {start}-{end}"
+                )
 
     for line, row in enumerate(data["rooms"], 2):
         loc = row["location_id"].strip()
