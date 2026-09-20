@@ -1,0 +1,43 @@
+{
+  "edition": "2026 demo",
+  "scenario_title": "Regiedashboard — demonstratiescenario",
+  "capacity_safety_margin": {
+    "ob": 20,
+    "bb": 15
+  },
+  "slots": [
+    {
+      "slot_id": "MO_AM",
+      "label": "Maandag ochtend",
+      "ob": {"demand": 412, "supply_before": 423, "change": -20},
+      "bb": {"demand": 291, "supply_before": 318, "change": 0}
+    },
+    {
+      "slot_id": "MO_PM",
+      "label": "Maandag middag",
+      "ob": {"demand": 398, "supply_before": 431, "change": 0},
+      "bb": {"demand": 286, "supply_before": 304, "change": 0}
+    },
+    {
+      "slot_id": "TU_AM",
+      "label": "Dinsdag ochtend",
+      "ob": {"demand": 405, "supply_before": 438, "change": 0},
+      "bb": {"demand": 289, "supply_before": 296, "change": 0}
+    }
+  ],
+  "workflow": {
+    "activities_total": 86,
+    "activities_complete": 72,
+    "website_pending": 8,
+    "magister_pending": 11,
+    "magister_changed_after_entry": 3,
+    "outside_in_unreconciled": 2,
+    "offerings_without_room": 4,
+    "offerings_without_staff": 6
+  },
+  "change_event": {
+    "title": "Workshopcapaciteit aangepast",
+    "detail": "Capaciteit van één workshop op maandag ochtend is met 20 plaatsen verlaagd.",
+    "source": "demo: Offering capacity change 30 → 10"
+  }
+}
