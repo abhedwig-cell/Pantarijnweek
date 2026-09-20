@@ -82,6 +82,21 @@ Wanneer een doelgroep via een lijst wordt aangeleverd in plaats van zelf in te s
 - mag geen tweede handmatige aftrek nodig zijn;
 - moeten persoonslijsten buiten de openbare repository blijven.
 
+## Buitenom-records en reconciliatie
+
+Een activiteit die leerlingen, capaciteit, personeel, ruimte of een dagdeel beïnvloedt mag niet alleen in een extern systeem bestaan.
+
+Voor elke buitenom-handeling geldt:
+- een nieuw of gewijzigd Magister-record moet als ExternalSystemRecord in de reconciliatie-inbox terechtkomen;
+- een record met status `unreconciled` moet zichtbaar blijven totdat het is gematcht of als centrale stub is aangemaakt;
+- vóór de capaciteits-preflight moeten alle externe activiteiten die de vrije-keuzevraag beïnvloeden minimaal `matched` of `created` zijn;
+- participant counts uit Magister Activiteiten moeten via PlacementSummary doorwerken in de capaciteitsberekening;
+- dezelfde groep leerlingen mag niet nogmaals handmatig in Excel of een tweede telling worden afgetrokken;
+- verschillen tussen het centrale record en de laatst bekende externe snapshot moeten als discrepantie worden getoond;
+- screenshots, foto's en deelnemerslijsten met persoonsgegevens mogen niet in de openbare repository worden opgeslagen.
+
+Een foto of screenshot mag wel als invoerhulp in een beveiligde operationele omgeving worden gebruikt. De centrale publieke laag verwerkt daarna alleen de noodzakelijke geaggregeerde uitkomst en eventueel een niet-herleidbare verwijzing naar die beveiligde bron.
+
 ## Lokalen
 
 Een room_id is een echte resource. Externe locaties en locaties met meerdere parallelle ruimtes moeten daarom afzonderlijke rooms of expliciete gedeelde capaciteit krijgen.
